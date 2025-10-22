@@ -19,6 +19,7 @@ function WeatherDisplay({city, units}) {
         const lon = placeData.location.longitude;
 
         const weatherDetails = await getCurrentWeather(process.env.REACT_APP_WEATHER_API_KEY,lat, lon, units)
+        console.log(weatherDetails.weather[0].icon)
         setWeatherData(weatherDetails)
     }
 
@@ -27,7 +28,7 @@ function WeatherDisplay({city, units}) {
             <h1>{city.displayText}</h1>
             {
                 weatherData.main && (
-                    <TempDisplay temperature={weatherData.main.temp} units={units}/>
+                    <TempDisplay weatherData={weatherData} units={units}/>
                 )
             }
         </div>
