@@ -1,7 +1,7 @@
 import CitySearchBar from './components/CitySearchBar';
 import logo from './logo.svg';
 import './scss/App.scss';
-
+import '@progress/kendo-theme-default/dist/all.css';
 function App() {
   return (
     <div className="App">
