@@ -10,8 +10,9 @@ function CitySearchBar({setSelectedCity}) {
         setInputValue(e.value)
         fetchCities();
 
-        if (cities.includes(e.value)) {
-            handleCitySelect(e.value);
+        const selected = cities.find((c) => c.displayText === e.value);
+        if (selected) {
+            handleCitySelect(selected);
         }
     }
 
@@ -22,7 +23,10 @@ function CitySearchBar({setSelectedCity}) {
         const cityCountryList = data.suggestions.map((s) => {
             const main = s.placePrediction.structuredFormat.mainText.text;
             const secondary = s.placePrediction.structuredFormat.secondaryText.text;
-            return `${main}, ${secondary}`;
+            return {
+                displayText: `${main}, ${secondary}`,
+                placeId: s.placePrediction.placeId
+            };
         });
         setCities(cityCountryList);
     }
@@ -34,6 +38,7 @@ function CitySearchBar({setSelectedCity}) {
     return (
         <AutoComplete 
             data={cities} 
+            textField="displayText"
             placeholder="Enter a city..."
             value={inputValue}
             onChange={onCityChange}
