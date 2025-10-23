@@ -1,11 +1,12 @@
 import { useState,useEffect } from "react";
 import { getPlaceDetails } from "../services/google-service";
 import { getCurrentWeather } from "../services/weather-service";
+import { getWeatherEmoji } from "../services/emoji-mapper-service";
 import TempDisplay from "./TempDisplay";
 
 function WeatherDisplay({city, units}) {
     const [weatherData, setWeatherData] = useState({})
-
+    const [emojiDisplay, setEmojiDisplay] = useState('');
     useEffect(() => {
         if (!city.placeId) return;
 
@@ -19,18 +20,15 @@ function WeatherDisplay({city, units}) {
         const lon = placeData.location.longitude;
 
         const weatherDetails = await getCurrentWeather(process.env.REACT_APP_WEATHER_API_KEY,lat, lon, units)
-        console.log(weatherDetails.weather[0].icon)
         setWeatherData(weatherDetails)
+        const emoji = getWeatherEmoji(weatherDetails.weather[0].main, weatherDetails.main.temp, units);
+        setEmojiDisplay(emoji);
     }
 
     return (
         <div>
             <h1>{city.displayText}</h1>
-            {
-                weatherData.main && (
-                    <TempDisplay weatherData={weatherData} units={units}/>
-                )
-            }
+            <p>{emojiDisplay}</p>
         </div>
     )
 }
